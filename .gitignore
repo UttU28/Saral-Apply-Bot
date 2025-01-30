@@ -1,0 +1,6 @@
+**/__pycache__/*
+**/env/*
+**/chromeData/*
+*-lock.json
+*.env
+*.db
