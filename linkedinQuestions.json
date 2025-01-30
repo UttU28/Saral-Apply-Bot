@@ -1,25 +1,21 @@
-{
-  "First name_Text Input": {
+[
+  {
     "question": "First name",
     "type": "Text Input",
     "required": true,
     "options": null,
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:49.903370",
-    "last_seen": "2025-01-30T00:11:49.903370"
+    "currentAnswer": "Ranga",
+    "verified": true
   },
-  "Last name_Text Input": {
+  {
     "question": "Last name",
     "type": "Text Input",
     "required": true,
     "options": null,
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:49.903370",
-    "last_seen": "2025-01-30T00:11:49.903370"
+    "currentAnswer": "Rick",
+    "verified": true
   },
-  "Phone country code_Dropdown": {
+  {
     "question": "Phone country code",
     "type": "Dropdown",
     "required": true,
@@ -272,34 +268,28 @@
       "Zambia (+260)",
       "Zimbabwe (+263)"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:49.903370",
-    "last_seen": "2025-01-30T00:11:49.903370"
+    "currentAnswer": "United States (+1)",
+    "verified": true
   },
-  "Mobile phone number_Text Input": {
+  {
     "question": "Mobile phone number",
     "type": "Text Input",
     "required": false,
     "options": null,
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:49.903370",
-    "last_seen": "2025-01-30T00:11:49.903370"
+    "currentAnswer": "1111111111",
+    "verified": true
   },
-  "Email address_Dropdown": {
+  {
     "question": "Email address",
     "type": "Dropdown",
     "required": true,
     "options": [
       "irangarick@gmail.com"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:49.903370",
-    "last_seen": "2025-01-30T00:11:49.903370"
+    "currentAnswer": "irangarick@gmail.com",
+    "verified": true
   },
-  "Are you legally authorized to work in the country where the job is located without any restrictions?_Radio Button": {
+  {
     "question": "Are you legally authorized to work in the country where the job is located without any restrictions?",
     "type": "Radio Button",
     "required": true,
@@ -307,12 +297,10 @@
       "Yes",
       "No"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "Yes",
+    "verified": true
   },
-  "Do you need sponsorship now or in the future for employment?_Radio Button": {
+  {
     "question": "Do you need sponsorship now or in the future for employment?",
     "type": "Radio Button",
     "required": true,
@@ -320,12 +308,10 @@
       "Yes",
       "No"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "No",
+    "verified": true
   },
-  "If this role or future roles require relocation:_Dropdown": {
+  {
     "question": "If this role or future roles require relocation:",
     "type": "Dropdown",
     "required": true,
@@ -334,12 +320,10 @@
       "I am willing to relocate and will need relocation assistance",
       "Relocation is not an option for me at this time"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "I am willing to relocate and will self relocate",
+    "verified": true
   },
-  "Have you previously worked for Palo Alto Networks?_Dropdown": {
+  {
     "question": "Have you previously worked for Palo Alto Networks?",
     "type": "Dropdown",
     "required": true,
@@ -351,12 +335,10 @@
       "Yes - Independent Consultant",
       "I am not sure"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "No - I have not worked for Palo Alto Networks",
+    "verified": true
   },
-  "Have you interviewed with Palo Alto Networks in the past?_Radio Button": {
+  {
     "question": "Have you interviewed with Palo Alto Networks in the past?",
     "type": "Radio Button",
     "required": true,
@@ -364,12 +346,10 @@
       "Yes",
       "No"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "No",
+    "verified": true
   },
-  "Would you like to be considered for future opportunities?_Radio Button": {
+  {
     "question": "Would you like to be considered for future opportunities?",
     "type": "Radio Button",
     "required": true,
@@ -377,12 +357,10 @@
       "Yes",
       "No"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "No",
+    "verified": true
   },
-  "Select the areas of work that are of interest to you:_Multiple Select (Checkbox)": {
+  {
     "question": "Select the areas of work that are of interest to you:",
     "type": "Multiple Select (Checkbox)",
     "required": true,
@@ -419,12 +397,15 @@
       "Technical Support",
       "Customer Success"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": [
+      "Information Security",
+      "Technical Support",
+      "Legal",
+      "People Team/Human Resources"
+    ],
+    "verified": true
   },
-  "How did you hear about us?_Dropdown": {
+  {
     "question": "How did you hear about us?",
     "type": "Dropdown",
     "required": true,
@@ -440,31 +421,86 @@
       "Other",
       "Conference or Event"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "Palo Alto Networks Careers Site",
+    "verified": true
   },
-  "If you were referred by a current employee, provide the employee's name._Text Input": {
+  {
     "question": "If you were referred by a current employee, provide the employee's name.",
     "type": "Text Input",
     "required": false,
     "options": null,
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "",
+    "verified": true
   },
-  "I understand that the information I submit as part of my job application will be used in accordance with [Palo Alto Network's Candidate Privacy Notice](https://www.paloaltonetworks.com/legal-notices/privacy/privacy-notice.html). I understand the processing of my information as described in that policy including that, in limited circumstances, Palo Alto Networks may share my contact information with trusted third parties, to assist in certain phases of the hiring process (such as conducting background checks)._Multiple Select (Checkbox)": {
+  {
     "question": "I understand that the information I submit as part of my job application will be used in accordance with [Palo Alto Network's Candidate Privacy Notice](https://www.paloaltonetworks.com/legal-notices/privacy/privacy-notice.html). I understand the processing of my information as described in that policy including that, in limited circumstances, Palo Alto Networks may share my contact information with trusted third parties, to assist in certain phases of the hiring process (such as conducting background checks).",
     "type": "Multiple Select (Checkbox)",
     "required": true,
     "options": [
       "Confirmed"
     ],
-    "currentAnswer": null,
-    "verified": false,
-    "first_seen": "2025-01-30T00:11:54.273061",
-    "last_seen": "2025-01-30T00:11:55.358289"
+    "currentAnswer": "Confirmed",
+    "verified": true
+  },
+  {
+    "question": "By checking this box, you will declare that you read and understand the privacy policy of Palo Alto Networks.",
+    "type": "Multiple Select (Checkbox)",
+    "required": true,
+    "options": [
+      "I consent"
+    ],
+    "currentAnswer": [
+      "I consent"
+    ],
+    "verified": true
+  },
+  {
+    "question": "How many years of work experience do you have with Python (Programming Language)?",
+    "type": "Text Input",
+    "required": true,
+    "options": null,
+    "currentAnswer": "4",
+    "verified": true
+  },
+  {
+    "question": "How many years of work experience do you have with React.js?",
+    "type": "Text Input",
+    "required": true,
+    "options": null,
+    "currentAnswer": "3",
+    "verified": true
+  },
+  {
+    "question": "Have you completed the following level of education: Master's Degree?",
+    "type": "Radio Button",
+    "required": true,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "currentAnswer": "Yes",
+    "verified": true
+  },
+  {
+    "question": "Are you comfortable working fully onsite at our office in Dallas, Texas?",
+    "type": "Dropdown",
+    "required": true,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "currentAnswer": "Yes",
+    "verified": true
+  },
+  {
+    "question": "Are you legally authorized to work in the United States?",
+    "type": "Radio Button",
+    "required": true,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "currentAnswer": "Yes",
+    "verified": true
   }
-}
+]

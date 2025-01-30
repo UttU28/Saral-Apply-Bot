@@ -11,6 +11,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import socket
 from scrapingQuestions import readTheInputsFrom
+import json
+from pathlib import Path
 
 load_dotenv()
 
@@ -29,10 +31,10 @@ def isPortInUse(port):
 
 def startChrome(debuggingPort, userDataDir, chromeAppPath):
     if isPortInUse(debuggingPort):
-        print(f"Chrome is already running on port {debuggingPort}, reusing existing instance...")
+        # print(f"Chrome is already running on port {debuggingPort}, reusing existing instance...")
         return None
     
-    print("Starting new Chrome instance...")
+    # print("Starting new Chrome instance...")
     chromeApp = subprocess.Popen([
         chromeAppPath,
         f'--remote-debugging-port={debuggingPort}',
@@ -55,7 +57,7 @@ def cleanupChrome(driver, chromeApp):
         try:
             chromeApp.wait(timeout=5)
         except subprocess.TimeoutExpired:
-            print("Force terminating Chrome...")
+            # print("Force terminating Chrome...")
             chromeApp.kill()
 
         try:
@@ -68,76 +70,124 @@ def cleanupChrome(driver, chromeApp):
                              stdout=subprocess.DEVNULL, 
                              stderr=subprocess.DEVNULL)
         except Exception as e:
-            print(f"Error cleaning up Chrome processes: {e}")
+            # print(f"Error cleaning up Chrome processes: {e}")
+            pass
 
+def loadExistingQuestions():
+    questionsFile = Path('linkedinQuestions.json')
+    if questionsFile.exists():
+        with open(questionsFile, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return []
+
+def updateQuestionsFile(newQuestions, existingQuestions):
+    if newQuestions is None:
+        # print("Warning: No new questions to process")
+        return
+        
+    existingSet = {(q.get('question', ''), q.get('type', '')) for q in existingQuestions}
+    
+    questionsAdded = 0
+    for question in newQuestions:
+        questionTuple = (question.get('question', ''), question.get('type', ''))
+        if questionTuple not in existingSet:
+            existingQuestions.append(question)
+            questionsAdded += 1
+            # print(f"Added new question: {question['question']}")
+    
+    with open('linkedinQuestions.json', 'w', encoding='utf-8') as f:
+        json.dump(existingQuestions, f, indent=2, ensure_ascii=False)
+    
+    # print(f"Added {questionsAdded} new questions to the database.")
+
+jobURL = "https://www.linkedin.com/jobs/view/4131825838/"
 if __name__ == "__main__":
+    status = 'RECEIVED'
+    print(f"Processing job with status: {status}")
     chromeDataDir = os.path.join(os.getcwd(), 'chromeData')
     if not os.path.exists(chromeDataDir):
         os.makedirs(chromeDataDir)
-        print(f"'{chromeDataDir}' directory was created.")
+        # print(f"'{chromeDataDir}' directory was created.")
     else:
-        print(f"'{chromeDataDir}' directory already exists.")
+        # print(f"'{chromeDataDir}' directory already exists.")
+        pass
 
     chromeApp = startChrome(debuggingPort, chromeUserDataDir, chromeAppPath)
     driver = setupChromeDriver(debuggingPort, chromeDriverPath)
 
-    driver.get("https://www.linkedin.com/jobs/view/4077912250/?eBP=NON_CHARGEABLE_CHANNEL&refId=SFSD565YzVQ%2BZlWyb7iGbw%3D%3D&trackingId=Lq4e6FNPm60Lbh1%2FaEAF3A%3D%3D&trk=flagship3_search_srp_jobs")
+    status = 'STARTED'
+    print(f"Processing job with status: {status}")
+    driver.get(jobURL)
     
     try:
         topCardDiv = WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CLASS_NAME, "jobs-apply-button--top-card"))
         )
-        print("Found the top card div")
+        
+        existingQuestions = loadExistingQuestions()
         
         easyApplyButton = topCardDiv.find_element(By.CLASS_NAME, "jobs-apply-button")
         easyApplyButton.click()
-        print("Successfully clicked Easy Apply button")
         
-        # Keep track of previous form HTML to detect when we're stuck on same page
-        previous_form_html = ""
-        same_page_count = 0
-        max_same_page_attempts = 1  # Maximum number of times to try same page
+        previousFormHtml = ""
+        samePageCount = 0
+        maxSamePageAttempts = 1
         
         while True:
             time.sleep(1)
-            form_modal = WebDriverWait(driver, 5).until(
+            formModal = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "jobs-easy-apply-modal"))
             )
-            current_form_html = form_modal.get_attribute('outerHTML')
+            currentFormHtml = formModal.get_attribute('outerHTML')
             
-            # Check if we're stuck on the same page
-            if current_form_html == previous_form_html:
-                same_page_count += 1
-                print(f"Warning: Same form detected ({same_page_count}/{max_same_page_attempts})")
-                if same_page_count >= max_same_page_attempts:
-                    print("Breaking loop - stuck on same page")
+            if currentFormHtml == previousFormHtml:
+                samePageCount += 1
+                if samePageCount >= maxSamePageAttempts:
+                    status = 'FAILED'
+                    print(f"Processing job with status: {status}")
                     break
             else:
-                same_page_count = 0
-                
-            # Send the HTML data to our scraping function
-            print("\n=== Processing New Form Page ===")
-            readTheInputsFrom(current_form_html)
+                samePageCount = 0
             
-            # Store current form HTML for next comparison
-            previous_form_html = current_form_html
+            newQuestions = readTheInputsFrom(driver, existingQuestions)
+            updateQuestionsFile(newQuestions, existingQuestions)
             
-            # Sleep for 1 second
+            previousFormHtml = currentFormHtml
             
             try:
-                # Find and click the Next button in the footer
                 footer = driver.find_element(By.TAG_NAME, "footer")
-                next_button = footer.find_element(By.CSS_SELECTOR, "button[aria-label='Continue to next step']")
-                next_button.click()
-                print("Successfully clicked Next button")
+                try:
+                    # Try to find submit application button
+                    submitButton = footer.find_element(By.CSS_SELECTOR, "button[aria-label='Submit application']")
+                    if submitButton:
+                        # Uncheck the follow company checkbox by clicking its label
+                        try:
+                            followLabel = driver.find_element(By.CSS_SELECTOR, "label[for='follow-company-checkbox']")
+                            followCheckbox = driver.find_element(By.ID, "follow-company-checkbox")
+                            if followCheckbox.is_selected():
+                                driver.execute_script("arguments[0].click();", followLabel)
+                        except Exception as e:
+                            pass
+                        
+                        # submitButton.click()
+                        status = 'COMPLETED'
+                        print(f"Processing job with status: {status}")
+                        break
+                except:
+                    # If not submit button, look for next/review button
+                    try:
+                        nextButton = footer.find_element(By.CSS_SELECTOR, "button[aria-label='Continue to next step']")
+                    except:
+                        nextButton = footer.find_element(By.CSS_SELECTOR, "button[aria-label='Review your application']")
+                    nextButton.click()
             except Exception as e:
-                print("No more Next buttons found - likely reached end of application")
-                break
-                
+                status = 'FAILED'
+                print(f"Processing job with status: {status}")
     except TimeoutException:
-        print("Error: Top card div or form modal not found within 5 seconds")
+        status = 'FAILED'
+        print(f"Processing job with status: {status}")
     except Exception as e:
-        print(f"Error: An error occurred: {e}")
-        
+        pass
+    
     input("Press Enter to close the browser...")
     cleanupChrome(driver, chromeApp)
