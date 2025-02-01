@@ -3,11 +3,14 @@ import os
 from datetime import datetime
 from selenium.webdriver.common.by import By
 
+# Define the JSON file path as a constant at the top of the file
+QUESTIONS_JSON_PATH = os.getenv('QUESTIONS_JSON')
+
 def readTheInputsFrom(driver, existingQuestions):
     """
     Analyze the Easy Apply form using Selenium and extract relevant information
     """
-    print("Analyzing Easy Apply form data:")
+    # print("Analyzing Easy Apply form data:")
     
     # Find all form elements
     formElements = driver.find_elements(By.CLASS_NAME, 'fb-dash-form-element')
@@ -195,7 +198,7 @@ def readTheInputsFrom(driver, existingQuestions):
                 'verified': False if not matchingQuestion else matchingQuestion.get('verified', False)
             })
     
-    print(f"\nFound {len(questions)} questions in the form:")
+    # print(f"\nFound {len(questions)} questions in the form:")
     # for q in questions:
     #     requiredText = "(Required)" if q['required'] else "(Optional)"
     #     print(f"{q['question']}")
@@ -205,3 +208,36 @@ def readTheInputsFrom(driver, existingQuestions):
     #     print()
     
     return questions 
+
+def loadExistingQuestions():
+    """Load existing questions from JSON file"""
+    try:
+        if os.path.exists(QUESTIONS_JSON_PATH):
+            with open(QUESTIONS_JSON_PATH, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception as e:
+        print(f"Error loading questions from {QUESTIONS_JSON_PATH}: {str(e)}")
+    return []
+
+def saveQuestionsToJson(questions):
+    """Save questions to JSON file"""
+    try:
+        with open(QUESTIONS_JSON_PATH, 'w', encoding='utf-8') as f:
+            json.dump(questions, f, indent=2, ensure_ascii=False)
+        print(f"Saved {len(questions)} questions to {QUESTIONS_JSON_PATH}")
+    except Exception as e:
+        print(f"Error saving questions to JSON: {str(e)}")
+
+def updateQuestionsFile(newQuestions, existingQuestions):
+    """Update questions file with new questions"""
+    try:
+        # Merge existing and new questions
+        allQuestions = existingQuestions or []
+        for newQ in newQuestions:
+            if newQ not in allQuestions:
+                allQuestions.append(newQ)
+        
+        # Save updated questions
+        saveQuestionsToJson(allQuestions)
+    except Exception as e:
+        print(f"Error updating questions file: {str(e)}") 
